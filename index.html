@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ELLE Taiwan｜生活風格專欄寫手</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E;
+    --black: #0A0A0A;
+    --white: #FAFAFA;
+    --gray: #6B6B6B;
+    --light: #F2F0EB;
+    --gold: #C9A84C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0 0 60px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: blur(3px) brightness(0.32) saturate(0.6);
+    transform: scale(1.06);
+    z-index: 0;
+  }
+
+  /* semi-transparent ELLE image overlay */
+  .hero-img-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?w=700&q=60');
+    background-size: cover;
+    background-position: center top;
+    opacity: 0.08;
+    mix-blend-mode: luminosity;
+    z-index: 1;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg,
+      rgba(200,16,46,0.22) 0%,
+      rgba(0,0,0,0.6) 55%,
+      rgba(0,0,0,0.82) 100%);
+    z-index: 2;
+  }
+
+  /* scanline texture */
+  .hero-shine {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 55px,
+      rgba(255,255,255,0.018) 56px
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── floating photo cards ── */
+  .photo-card {
+    position: absolute;
+    z-index: 4;
+    pointer-events: none;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    opacity: 0;
+    animation: cardFadeIn 1s ease forwards, floatY var(--dur, 7s) ease-in-out var(--del2, 1s) infinite;
+  }
+  .photo-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.82) saturate(0.75);
+  }
+  /* positions & sizes */
+  .pc1 { top: 5%;   left: -4%;  width: 110px; height: 75px;  --dur:8s;  --del2:0s;   transform: rotate(-6deg); animation-delay: 0.3s, 0.3s; }
+  .pc2 { top: 12%;  right: -3%; width: 90px;  height: 65px;  --dur:6s;  --del2:0.5s; transform: rotate(5deg);  animation-delay: 0.6s, 0.6s; }
+  .pc3 { top: 42%;  left: -5%;  width: 100px; height: 70px;  --dur:9s;  --del2:1s;   transform: rotate(-4deg); animation-delay: 0.9s, 0.9s; }
+  .pc4 { top: 48%;  right: -4%; width: 95px;  height: 68px;  --dur:7s;  --del2:2s;   transform: rotate(7deg);  animation-delay: 0.5s, 0.5s; }
+  .pc5 { bottom:14%;left: -3%;  width: 108px; height: 72px;  --dur:10s; --del2:0.8s; transform: rotate(-3deg); animation-delay: 0.8s, 0.8s; }
+  .pc6 { bottom:8%; right: -5%; width: 92px;  height: 64px;  --dur:6.5s;--del2:1.5s; transform: rotate(4deg);  animation-delay: 1s,   1s; }
+
+  @keyframes cardFadeIn {
+    from { opacity: 0; transform: scale(0.88) rotate(var(--rot, 0deg)); }
+    to   { opacity: 0.38; }
+  }
+  @keyframes floatY {
+    0%,100% { transform: translateY(0) rotate(var(--rot,0deg)); }
+    50%      { transform: translateY(-9px) rotate(var(--rot,0deg)); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    padding: 80px 28px 0;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .elle-badge {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--red);
+    padding: 7px 20px;
+    margin-bottom: 26px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.74rem;
+    letter-spacing: 0.24em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    animation: fadeUp 0.9s ease both 0.1s;
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.9rem, 7.5vw, 2.7rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 8px;
+    animation: fadeUp 1s ease both 0.15s;
+  }
+  .hero-title .accent {
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    margin: 20px 0 32px;
+    animation: fadeUp 1s ease both 0.3s;
+  }
+
+  .hero-cta {
+    display: block;
+    width: 100%;
+    max-width: 310px;
+    margin: 0 auto;
+    padding: 17px 0;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border: 2px solid var(--red);
+    transition: background .25s, color .25s, transform .18s;
+    animation: fadeUp 1s ease both 0.45s;
+    cursor: pointer;
+  }
+  .hero-cta:hover { background: transparent; transform: translateY(-2px); }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    animation: fadeIn 2s ease 1.5s both;
+  }
+  .scroll-bar {
+    width: 1px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    overflow: hidden; position: relative;
+  }
+  .scroll-bar::after {
+    content: '';
+    position: absolute; top: -100%; left: 0;
+    width: 100%; height: 100%;
+    background: var(--red);
+    animation: scrollLine 1.9s ease-in-out infinite;
+  }
+  @keyframes scrollLine { 0%{top:-100%} 100%{top:100%} }
+
+  /* ── HOOK ── */
+  .hook-section { background: var(--light); padding: 52px 28px; }
+  .hook-inner { max-width: 480px; margin: 0 auto; }
+  .hook-quote {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--black);
+    border-left: 3px solid var(--red);
+    padding-left: 16px;
+    margin-bottom: 18px;
+  }
+  .hook-body { font-size: 0.87rem; color: #555; line-height: 2; }
+
+  /* ── TOPICS ── */
+  .topics-section { background: var(--black); padding: 52px 28px; }
+  .topics-inner { max-width: 480px; margin: 0 auto; }
+  .section-label-light { font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+  .section-title-light { font-family: 'Noto Serif TC', serif; font-size: 1.35rem; font-weight: 900; color: var(--white); margin-bottom: 26px; }
+  .topic-item { display: flex; align-items: flex-start; gap: 13px; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .topic-item:last-child { border-bottom: none; }
+  .topic-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); margin-top: 7px; flex-shrink: 0; }
+  .topic-text { font-size: 0.88rem; color: rgba(255,255,255,0.78); line-height: 1.6; }
+
+  /* ── HOW ── */
+  .how-section { padding: 52px 24px; max-width: 480px; margin: 0 auto; }
+  .section-label { font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+  .section-title { font-family: 'Noto Serif TC', serif; font-size: 1.35rem; font-weight: 900; margin-bottom: 22px; }
+  .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+  .how-card { background: var(--light); padding: 17px 15px; border-top: 2px solid var(--red); }
+  .how-card-icon { font-size: 1.25rem; margin-bottom: 7px; }
+  .how-card-title { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .how-card-body { font-size: 0.73rem; color: var(--gray); line-height: 1.6; }
+
+  /* ── INCOME ── */
+  .income-section { background: var(--black); padding: 52px 28px; }
+  .income-inner { max-width: 480px; margin: 0 auto; }
+  .income-sub { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-bottom: 26px; margin-top: 4px; }
+  .per-article {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,16,46,0.35);
+    padding: 15px 18px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2px;
+  }
+  .per-article-label { font-size: 0.76rem; color: rgba(255,255,255,0.55); }
+  .per-article-value { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--gold); }
+  .income-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 19px 0; border-bottom: 1px solid rgba(255,255,255,0.09);
+  }
+  .income-row:first-of-type { border-top: 1px solid rgba(255,255,255,0.09); margin-top: 4px; }
+  .income-count { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 900; color: var(--white); }
+  .income-count span { font-family: 'Noto Sans TC', sans-serif; font-size: 0.78rem; font-weight: 400; color: rgba(255,255,255,0.4); margin-left: 3px; }
+  .income-label-tiny { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 3px; }
+  .income-range { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--gold); }
+  .income-label-sm { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; text-align: right; }
+
+  /* ── BENEFITS ── */
+  .benefits-section { padding: 52px 24px; max-width: 480px; margin: 0 auto; }
+  .benefit-list { margin-top: 22px; }
+  .benefit-item { display: flex; gap: 14px; padding: 17px 0; border-bottom: 1px solid #EBEBEB; align-items: flex-start; }
+  .benefit-num { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 900; color: var(--red); opacity: 0.22; line-height: 1; flex-shrink: 0; width: 26px; }
+  .benefit-text { font-size: 0.86rem; color: #444; line-height: 1.65; padding-top: 3px; }
+  .benefit-text strong { display: block; font-weight: 700; color: var(--black); font-size: 0.88rem; margin-bottom: 3px; }
+  .benefit-note { margin-top: 22px; font-size: 0.8rem; color: var(--gray); line-height: 1.85; font-style: italic; }
+
+  /* ── CLOSING ── */
+  .closing-section { background: var(--light); padding: 52px 28px; text-align: center; }
+  .closing-inner { max-width: 480px; margin: 0 auto; }
+  .closing-title { font-family: 'Noto Serif TC', serif; font-size: 1.25rem; font-weight: 900; line-height: 1.5; margin-bottom: 14px; }
+  .closing-body { font-size: 0.86rem; color: #555; line-height: 1.9; margin-bottom: 30px; }
+  .cta-bottom {
+    display: block; width: 100%; max-width: 310px; margin: 0 auto;
+    padding: 17px 0; background: var(--red); color: var(--white);
+    font-family: 'Noto Serif TC', serif; font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.1em; text-decoration: none;
+    border: 2px solid var(--red);
+    transition: background .25s, border-color .25s, transform .18s;
+    text-align: center;
+  }
+  .cta-bottom:hover { background: var(--black); border-color: var(--black); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--black); text-align: center; padding: 26px 24px; font-size: 0.68rem; color: rgba(255,255,255,0.28); letter-spacing: 0.12em; }
+  footer strong { color: var(--white); font-family: 'Playfair Display', serif; letter-spacing: 0.22em; }
+
+  /* keyframes */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  /* scroll reveal */
+  .reveal { opacity:0; transform:translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-img-overlay"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-shine"></div>
+
+  <!-- floating writer/article photo cards -->
+  <div class="photo-card pc1">
+    <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=220&q=70" alt="">
+  </div>
+  <div class="photo-card pc2">
+    <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=220&q=70" alt="">
+  </div>
+  <div class="photo-card pc3">
+    <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=220&q=70" alt="">
+  </div>
+  <div class="photo-card pc4">
+    <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=220&q=70" alt="">
+  </div>
+  <div class="photo-card pc5">
+    <img src="https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=220&q=70" alt="">
+  </div>
+  <div class="photo-card pc6">
+    <img src="https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=220&q=70" alt="">
+  </div>
+
+  <div class="hero-content">
+    <div class="elle-badge">ELLE Taiwan</div>
+    <p class="hero-eyebrow">現在招募中 · Now Hiring</p>
+    <h1 class="hero-title">
+      有些人滑文章，<br>
+      有些人<span class="accent">寫出它</span>
+    </h1>
+    <p class="hero-sub">
+      生活風格專欄寫手<br>
+      遠端創作・彈性時間・稿費制合作
+    </p>
+    <a href="https://lin.ee/2V7Gl57" target="_blank" class="hero-cta">立即了解並加入我們</a>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-bar"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- ══ HOOK ══ -->
+<div class="hook-section">
+  <div class="hook-inner reveal">
+    <div class="hook-quote">
+      如果你平常喜歡寫文字、記錄生活、分享想法，<br>
+      也對時尚、生活風格或文化議題有興趣——
+    </div>
+    <p class="hook-body">
+      那麼，也許你會喜歡這個角色。<br><br>
+      現在 ELLE Taiwan 正在邀請 <strong>生活風格專欄寫手</strong>，一起加入內容創作。
+    </p>
+  </div>
+</div>
+
+<!-- ══ TOPICS ══ -->
+<div class="topics-section">
+  <div class="topics-inner reveal">
+    <p class="section-label-light">✨ 你可以創作的主題</p>
+    <h2 class="section-title-light">五大創作方向</h2>
+    <div class="topic-item"><div class="topic-dot"></div><div class="topic-text">生活風格與日常觀察</div></div>
+    <div class="topic-item"><div class="topic-dot"></div><div class="topic-text">女性議題與文化觀點</div></div>
+    <div class="topic-item"><div class="topic-dot"></div><div class="topic-text">旅遊與城市故事</div></div>
+    <div class="topic-item"><div class="topic-dot"></div><div class="topic-text">時尚與流行觀察</div></div>
+    <div class="topic-item"><div class="topic-dot"></div><div class="topic-text">個人成長與生活體驗</div></div>
+  </div>
+</div>
+
+<!-- ══ HOW ══ -->
+<div class="how-section reveal">
+  <p class="section-label">💻 創作方式</p>
+  <h2 class="section-title">彈性遠端，自由創作</h2>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-card-icon">🏠</div>
+      <div class="how-card-title">遠端創作</div>
+      <div class="how-card-body">任何地方都能寫作</div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">📋</div>
+      <div class="how-card-title">主題撰寫</div>
+      <div class="how-card-body">依主題方向撰寫，有明確框架</div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">⏰</div>
+      <div class="how-card-title">彈性時間</div>
+      <div class="how-card-body">自行安排時間，無需打卡</div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">✅</div>
+      <div class="how-card-title">編輯審閱</div>
+      <div class="how-card-body">投稿後由專業編輯審閱</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INCOME ══ -->
+<div class="income-section">
+  <div class="income-inner reveal">
+    <p class="section-label-light">💰 合作方式與收入參考</p>
+    <h2 class="section-title-light">文章稿費制</h2>
+    <p class="income-sub">每月保底 30 篇，平均每天約 1–2 篇</p>
+
+    <div class="per-article">
+      <span class="per-article-label">每篇稿費</span>
+      <span class="per-article-value">NT$450 – $800</span>
+    </div>
+
+    <div class="income-row">
+      <div>
+        <div class="income-count">30 <span>篇/月</span></div>
+        <div class="income-label-tiny">保底合作量</div>
+      </div>
+      <div>
+        <div class="income-range">$13,500 – $24,000</div>
+        <div class="income-label-sm">月收入參考</div>
+      </div>
+    </div>
+    <div class="income-row">
+      <div>
+        <div class="income-count">60 <span>篇/月</span></div>
+        <div class="income-label-tiny">進階合作量</div>
+      </div>
+      <div>
+        <div class="income-range">$27,000 – $48,000</div>
+        <div class="income-label-sm">月收入參考</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BENEFITS ══ -->
+<div class="benefits-section reveal">
+  <p class="section-label">✨ 為什麼加入 ELLE Taiwan</p>
+  <h2 class="section-title">加入之後，你能獲得</h2>
+  <div class="benefit-list">
+    <div class="benefit-item">
+      <div class="benefit-num">01</div>
+      <div class="benefit-text"><strong>在 ELLE 平台發表作品</strong>讓你的文字被更多讀者看見</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-num">02</div>
+      <div class="benefit-text"><strong>累積媒體寫作經驗</strong>實際磨練專業寫作能力</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-num">03</div>
+      <div class="benefit-text"><strong>建立個人創作者履歷</strong>留下有公信力的作品紀錄</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-num">04</div>
+      <div class="benefit-text"><strong>接觸時尚與品牌合作機會</strong>開啟更多跨界可能</div>
+    </div>
+  </div>
+  <p class="benefit-note">很多寫手的第一篇公開文章，<br>其實就是從這樣開始的。</p>
+</div>
+
+<!-- ══ CLOSING ══ -->
+<div class="closing-section">
+  <div class="closing-inner reveal">
+    <h2 class="closing-title">把自己的想法，<br>寫成值得被閱讀的故事</h2>
+    <p class="closing-body">
+      歡迎加入 ELLE Taiwan<br>
+      一起創作更多值得被閱讀的內容
+    </p>
+    <a href="https://lin.ee/2V7Gl57" target="_blank" class="cta-bottom">立即了解並加入我們</a>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <strong>ELLE TAIWAN</strong><br>
+  生活風格專欄寫手 招募中
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
